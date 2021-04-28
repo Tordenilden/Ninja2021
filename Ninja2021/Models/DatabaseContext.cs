@@ -14,12 +14,20 @@ namespace Ninja2021.Models
         // det kan vi lige tale om senere DI
         public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
         {
-            //Database.EnsureCreated() // ver 2.1
-            //Database.EnsureCreated
-            //Database.Migrate();
         }
 
         //public DbSet<className> yourTableName { get; set; }
         public DbSet<Samurai> Samurais { get; set; }
+        public DbSet<Battle> Battles { get; set; }
+        // public DbSet<SamuraisInBattle> SamuraisInBattle { get; set; } behøves vi det?? skal vi have fundet ud af :)
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<SamuraisInBattle>().HasKey(relation => new
+            {
+                relation.samuraiId,
+                relation.battleId
+            });
+        }
     }
 }

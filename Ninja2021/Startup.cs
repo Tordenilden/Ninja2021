@@ -40,7 +40,11 @@ namespace Ninja2021
             var connectionString = @"Server=TEC-5350-LA0052;Database=NinjaBlodig; Trusted_Connection=true";
 
             services.AddDbContext<DatabaseContext>(option => option.UseSqlServer(connectionString));
-            services.AddControllers();
+            services.AddControllers()
+                         .AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
+            // her siger vi til .NET CORE at vi vil benytte Swagger, så det er opsætning mm.
+            services.AddSwaggerGen();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,6 +54,12 @@ namespace Ninja2021
             {
                 app.UseDeveloperExceptionPage();
             }
+            //Swagger
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
 
             app.UseHttpsRedirection();
 
